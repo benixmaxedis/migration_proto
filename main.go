@@ -58,35 +58,35 @@ type RingCentralNumber struct {
 	Region   string   `json:"region"`
 }
 
-// Claude API structures
-type ClaudeRequest struct {
-	Model     string          `json:"model"`
-	MaxTokens int             `json:"max_tokens"`
-	Messages  []ClaudeMessage `json:"messages"`
+// Engine Room AI API structures
+type EngineRoomRequest struct {
+	Model     string                `json:"model"`
+	MaxTokens int                   `json:"max_tokens"`
+	Messages  []EngineRoomMessage   `json:"messages"`
 }
 
-type ClaudeMessage struct {
+type EngineRoomMessage struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
 }
 
-type ClaudeResponse struct {
-	Content []ClaudeContent `json:"content"`
-	Usage   ClaudeUsage     `json:"usage"`
+type EngineRoomResponse struct {
+	Content []EngineRoomContent `json:"content"`
+	Usage   EngineRoomUsage     `json:"usage"`
 }
 
-type ClaudeContent struct {
+type EngineRoomContent struct {
 	Type string `json:"type"`
 	Text string `json:"text"`
 }
 
-type ClaudeUsage struct {
+type EngineRoomUsage struct {
 	InputTokens  int `json:"input_tokens"`
 	OutputTokens int `json:"output_tokens"`
 }
 
 // AI-enhanced migration types
-type ClaudeEnhancedMigrator struct {
+type EngineRoomEnhancedMigrator struct {
 	apiKey     string
 	httpClient *http.Client
 }
@@ -214,8 +214,8 @@ var (
 		Margin(1)
 )
 
-func NewClaudeEnhancedMigrator(apiKey string) *ClaudeEnhancedMigrator {
-	return &ClaudeEnhancedMigrator{
+func NewEngineRoomEnhancedMigrator(apiKey string) *EngineRoomEnhancedMigrator {
+	return &EngineRoomEnhancedMigrator{
 		apiKey: apiKey,
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
@@ -223,11 +223,11 @@ func NewClaudeEnhancedMigrator(apiKey string) *ClaudeEnhancedMigrator {
 	}
 }
 
-func (c *ClaudeEnhancedMigrator) callClaude(prompt string) (string, error) {
-	request := ClaudeRequest{
+func (c *EngineRoomEnhancedMigrator) callEngineRoom(prompt string) (string, error) {
+	request := EngineRoomRequest{
 		Model:     "claude-3-sonnet-20240229",
 		MaxTokens: 4000,
-		Messages: []ClaudeMessage{
+		Messages: []EngineRoomMessage{
 			{
 				Role: "user",
 				Content: prompt,
@@ -261,22 +261,22 @@ func (c *ClaudeEnhancedMigrator) callClaude(prompt string) (string, error) {
 	}
 
 	if resp.StatusCode != 200 {
-		return "", fmt.Errorf("Claude API error: %s", string(body))
+		return "", fmt.Errorf("Engine Room AI API error: %s", string(body))
 	}
 
-	var claudeResp ClaudeResponse
-	if err := json.Unmarshal(body, &claudeResp); err != nil {
+	var engineRoomResp EngineRoomResponse
+	if err := json.Unmarshal(body, &engineRoomResp); err != nil {
 		return "", err
 	}
 
-	if len(claudeResp.Content) == 0 {
-		return "", fmt.Errorf("no content in Claude response")
+	if len(engineRoomResp.Content) == 0 {
+		return "", fmt.Errorf("no content in Engine Room AI response")
 	}
 
-	return claudeResp.Content[0].Text, nil
+	return engineRoomResp.Content[0].Text, nil
 }
 
-func (c *ClaudeEnhancedMigrator) PlanMigrationOrder(users []TwilioUser) (*MigrationPlan, error) {
+func (c *EngineRoomEnhancedMigrator) PlanMigrationOrder(users []TwilioUser) (*MigrationPlan, error) {
 	usersJSON, err := json.MarshalIndent(users, "", "  ")
 	if err != nil {
 		return nil, err
@@ -336,30 +336,30 @@ Respond with a JSON object in this exact format:
 
 Create a comprehensive to-do list with 5-8 steps that covers the entire migration process from preparation to completion.`, string(usersJSON))
 
-	response, err := c.callClaude(prompt)
+	response, err := c.callEngineRoom(prompt)
 	if err != nil {
-		return nil, fmt.Errorf("Claude API error: %w", err)
+		return nil, fmt.Errorf("Engine Room AI API error: %w", err)
 	}
 
-	// Extract JSON from Claude's response
+	// Extract JSON from Engine Room AI's response
 	jsonStart := strings.Index(response, "{")
 	jsonEnd := strings.LastIndex(response, "}") + 1
 	
 	if jsonStart == -1 || jsonEnd == 0 {
-		return nil, fmt.Errorf("no valid JSON found in Claude response")
+		return nil, fmt.Errorf("no valid JSON found in Engine Room AI response")
 	}
 
 	jsonStr := response[jsonStart:jsonEnd]
 	
 	var plan MigrationPlan
 	if err := json.Unmarshal([]byte(jsonStr), &plan); err != nil {
-		return nil, fmt.Errorf("failed to parse Claude response: %w\nResponse: %s", err, jsonStr)
+		return nil, fmt.Errorf("failed to parse Engine Room AI response: %w\nResponse: %s", err, jsonStr)
 	}
 
 	return &plan, nil
 }
 
-func (c *ClaudeEnhancedMigrator) AnalyzeDataQuality(users []TwilioUser) (string, error) {
+func (c *EngineRoomEnhancedMigrator) AnalyzeDataQuality(users []TwilioUser) (string, error) {
 	usersJSON, _ := json.MarshalIndent(users, "", "  ")
 	
 	prompt := fmt.Sprintf(`Analyze this phone system data for migration readiness:
@@ -375,7 +375,7 @@ Please check for:
 
 Provide a concise analysis with specific recommendations for data cleanup before migration.`, string(usersJSON))
 
-	return c.callClaude(prompt)
+	return c.callEngineRoom(prompt)
 }
 
 func initialModel() model {
@@ -393,7 +393,7 @@ func initialModel() model {
 		textInput:     ti,
 		sourceFormats: []string{"Twilio", "RingCentral"},
 		targetFormats: []string{"Twilio", "RingCentral"},
-		aiOptions:     []string{"Yes - Use Claude AI", "No - Standard migration"},
+		aiOptions:     []string{"Yes - Use Engine Room AI", "No - Standard migration"},
 	}
 }
 
@@ -601,7 +601,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	var s strings.Builder
 
-	s.WriteString(titleStyle.Render("☎️  Claude Code-Style Migration Tool"))
+	s.WriteString(titleStyle.Render("☎️  Engine Room AI Migration Tool"))
 	s.WriteString("\n\n")
 
 	switch m.state {
@@ -652,9 +652,9 @@ func (m model) View() string {
 		s.WriteString(helpStyle.Render("Navigate with ↑/↓, select with Enter"))
 
 	case askingAIPreference:
-		s.WriteString(aiStyle.Render("Step 5: Use Claude AI for smart migration?"))
+		s.WriteString(aiStyle.Render("Step 5: Use Engine Room AI for smart migration?"))
 		s.WriteString("\n\n")
-		s.WriteString("Claude can analyze your data and create a detailed migration plan.\n\n")
+		s.WriteString("Engine Room AI can analyze your data and create a detailed migration plan.\n\n")
 		for i, option := range m.aiOptions {
 			cursor := " "
 			if i == m.selectedAI {
@@ -666,13 +666,13 @@ func (m model) View() string {
 		s.WriteString(helpStyle.Render("Navigate with ↑/↓, select with Enter"))
 
 	case showingPlan:
-		s.WriteString(aiStyle.Render("🤖 Claude is analyzing your data and creating a migration plan..."))
+		s.WriteString(aiStyle.Render("🤖 Engine Room AI is analyzing your data and creating a migration plan..."))
 		s.WriteString("\n\n")
-		s.WriteString(m.spinner.View() + " Please wait while Claude examines your phone system data...\n\n")
+		s.WriteString(m.spinner.View() + " Please wait while Engine Room AI examines your phone system data...\n\n")
 
 	case confirmingPlan:
 		if m.migrationPlan != nil {
-			s.WriteString(aiStyle.Render("📋 Claude's Migration Plan"))
+			s.WriteString(aiStyle.Render("📋 Engine Room AI's Migration Plan"))
 			s.WriteString("\n\n")
 			
 			// Show estimated time
@@ -766,7 +766,7 @@ func (m model) View() string {
 			s.WriteString(successStyle.Render("✅ Migration completed successfully!"))
 			s.WriteString("\n\n")
 			if m.config.UseAI {
-				s.WriteString(aiStyle.Render("🧠 Enhanced with Claude AI analysis"))
+				s.WriteString(aiStyle.Render("🧠 Enhanced with Engine Room AI analysis"))
 				s.WriteString("\n")
 			}
 			s.WriteString(fmt.Sprintf("Data migrated from %s (%s) to %s (%s)\n",
@@ -828,9 +828,9 @@ switch m.state {
 		s.WriteString(helpStyle.Render("Navigate with ↑/↓, select with Enter"))
 
 	case askingAIPreference:
-		s.WriteString(aiStyle.Render("Step 5: Use Claude AI for smart migration?"))
+		s.WriteString(aiStyle.Render("Step 5: Use Engine Room AI for smart migration?"))
 		s.WriteString("\n\n")
-		s.WriteString("Claude can analyze your data and recommend optimal migration order.\n\n")
+		s.WriteString("Engine Room AI can analyze your data and recommend optimal migration order.\n\n")
 		for i, option := range m.aiOptions {
 			cursor := " "
 			if i == m.selectedAI {
@@ -851,7 +851,7 @@ switch m.state {
 			s.WriteString(successStyle.Render("✅ Migration completed successfully!"))
 			s.WriteString("\n\n")
 			if m.config.UseAI {
-				s.WriteString(aiStyle.Render("🧠 Enhanced with Claude AI analysis"))
+				s.WriteString(aiStyle.Render("🧠 Enhanced with Engine Room AI analysis"))
 				s.WriteString("\n")
 			}
 			s.WriteString(fmt.Sprintf("Data migrated from %s (%s) to %s (%s)\n",
@@ -900,11 +900,11 @@ func generateMigrationPlan(config MigrationConfig) tea.Cmd {
 			return migrationPlanMsg{nil, fmt.Errorf("failed to parse source data: %w", err)}
 		}
 
-		// Get Claude's migration plan
-		claudeMigrator := NewClaudeEnhancedMigrator(apiKey)
-		plan, err := claudeMigrator.PlanMigrationOrder(twilioSystem.Users)
+		// Get Engine Room AI's migration plan
+		engineRoomMigrator := NewEngineRoomEnhancedMigrator(apiKey)
+		plan, err := engineRoomMigrator.PlanMigrationOrder(twilioSystem.Users)
 		if err != nil {
-			return migrationPlanMsg{nil, fmt.Errorf("Claude analysis failed: %w", err)}
+			return migrationPlanMsg{nil, fmt.Errorf("Engine Room AI analysis failed: %w", err)}
 		}
 
 		return migrationPlanMsg{plan, nil}
@@ -931,7 +931,7 @@ func executeNextStep(config MigrationConfig, plan *MigrationPlan, stepIndex int)
 		case 2: // Begin migration
 			details = "✓ Started migration in priority order"
 		case 3: // User migration
-			details = fmt.Sprintf("✓ Migrated %d users according to Claude's recommendations", len(plan.RecommendedOrder))
+			details = fmt.Sprintf("✓ Migrated %d users according to Engine Room AI's recommendations", len(plan.RecommendedOrder))
 		case 4: // Phone number migration
 			details = "✓ Phone numbers and capabilities migrated"
 		case 5: // Final validation
@@ -965,19 +965,19 @@ func performActualMigration(config MigrationConfig, plan *MigrationPlan) error {
 		return fmt.Errorf("failed to parse source data: %w", err)
 	}
 
-	// Reorder users based on Claude's recommendations
+	// Reorder users based on Engine Room AI's recommendations
 	var orderedUsers []TwilioUser
 	for _, item := range plan.RecommendedOrder {
 		orderedUsers = append(orderedUsers, item.Account)
 	}
 	twilioSystem.Users = orderedUsers
 
-	// Create enhanced output with Claude's insights
+	// Create enhanced output with Engine Room AI's insights
 	enhancedOutput := map[string]interface{}{
 		"migration_plan":     plan,
 		"converted_data":     nil, // Will be filled below
 		"migration_metadata": map[string]interface{}{
-			"enhanced_by":    "Claude AI",
+			"enhanced_by":    "Engine Room AI",
 			"migration_time": time.Now().Format("2006-01-02 15:04:05"),
 			"source_format":  config.SourceFormat,
 			"target_format":  config.TargetFormat,
@@ -990,7 +990,7 @@ func performActualMigration(config MigrationConfig, plan *MigrationPlan) error {
 		rcSystem := convertTwilioToRingCentral(twilioSystem)
 		enhancedOutput["converted_data"] = rcSystem
 	} else {
-		return fmt.Errorf("Claude-enhanced migration currently only supports Twilio to RingCentral")
+		return fmt.Errorf("Engine Room AI-enhanced migration currently only supports Twilio to RingCentral")
 	}
 
 	// Write enhanced output
@@ -1037,7 +1037,7 @@ func performMigration(config MigrationConfig) tea.Cmd {
 	}
 }
 
-func migrateWithClaude(config MigrationConfig) error {
+func migrateWithEngineRoom(config MigrationConfig) error {
 	// Get Claude API key from environment
 	apiKey := os.Getenv("ANTHROPIC_API_KEY")
 	if apiKey == "" {
@@ -1056,36 +1056,36 @@ func migrateWithClaude(config MigrationConfig) error {
 		return fmt.Errorf("failed to parse source data: %w", err)
 	}
 
-	// Initialize Claude migrator
-	claudeMigrator := NewClaudeEnhancedMigrator(apiKey)
+	// Initialize Engine Room AI migrator
+	engineRoomMigrator := NewEngineRoomEnhancedMigrator(apiKey)
 
-	// Get Claude's analysis and recommendations
-	plan, err := claudeMigrator.PlanMigrationOrder(twilioSystem.Users)
+	// Get Engine Room AI's analysis and recommendations
+	plan, err := engineRoomMigrator.PlanMigrationOrder(twilioSystem.Users)
 	if err != nil {
-		return fmt.Errorf("Claude analysis failed: %w", err)
+		return fmt.Errorf("Engine Room AI analysis failed: %w", err)
 	}
 
 	// Get data quality analysis
-	qualityAnalysis, err := claudeMigrator.AnalyzeDataQuality(twilioSystem.Users)
+	qualityAnalysis, err := engineRoomMigrator.AnalyzeDataQuality(twilioSystem.Users)
 	if err != nil {
 		log.Printf("Data quality analysis failed: %v", err)
 	}
 
-	// Create enhanced output with Claude's insights
+	// Create enhanced output with Engine Room AI's insights
 	enhancedOutput := map[string]interface{}{
 		"migration_plan":     plan,
 		"data_quality":       qualityAnalysis,
 		"original_data":      twilioSystem,
 		"converted_data":     nil, // Will be filled below
 		"migration_metadata": map[string]interface{}{
-			"enhanced_by":    "Claude AI",
+			"enhanced_by":    "Engine Room AI",
 			"migration_time": time.Now().Format("2006-01-02 15:04:05"),
 			"source_format":  config.SourceFormat,
 			"target_format":  config.TargetFormat,
 		},
 	}
 
-	// Reorder users based on Claude's recommendations
+	// Reorder users based on Engine Room AI's recommendations
 	var orderedUsers []TwilioUser
 	for _, item := range plan.RecommendedOrder {
 		orderedUsers = append(orderedUsers, item.Account)
@@ -1097,7 +1097,7 @@ func migrateWithClaude(config MigrationConfig) error {
 		rcSystem := convertTwilioToRingCentral(twilioSystem)
 		enhancedOutput["converted_data"] = rcSystem
 	} else {
-		return fmt.Errorf("Claude-enhanced migration currently only supports Twilio to RingCentral")
+		return fmt.Errorf("Engine Room AI-enhanced migration currently only supports Twilio to RingCentral")
 	}
 
 	// Write enhanced output

@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `go mod tidy` - Clean up and verify dependencies
 
 ### Environment Setup
-- Set `ANTHROPIC_API_KEY` environment variable for Claude AI integration
+- Set `ANTHROPIC_API_KEY` environment variable for Engine Room AI integration
 - Example: `export ANTHROPIC_API_KEY=your_api_key_here`
 
 ### Git/GitHub Workflow
@@ -34,7 +34,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a Go-based phone system migration tool with Claude AI integration. The application uses the Bubble Tea TUI framework for an interactive command-line interface.
+This is a Go-based phone system migration tool with Engine Room AI integration. The application uses the Bubble Tea TUI framework for an interactive command-line interface.
 
 ### Core Components
 
@@ -46,18 +46,18 @@ This is a Go-based phone system migration tool with Claude AI integration. The a
 **Data Models:**
 - `TwilioPhoneSystem` and `TwilioUser` (lines 21-39) - Source format structures
 - `RingCentralPhoneSystem` and `RingCentralAccount` (lines 41-59) - Target format structures  
-- `ClaudeRequest/Response` (lines 62-86) - Claude API integration structures
+- `EngineRoomRequest/Response` (lines 62-86) - Engine Room AI API integration structures
 - `MigrationPlan` and `TodoItem` (lines 94-108) - AI-generated migration planning
 
 **Migration Engine:**
-- `ClaudeEnhancedMigrator` (lines 89-92) - AI-powered migration orchestrator
-- `PlanMigrationOrder()` (lines 279-360) - Claude analyzes data and creates step-by-step plans
+- `EngineRoomEnhancedMigrator` (lines 89-92) - AI-powered migration orchestrator
+- `PlanMigrationOrder()` (lines 279-360) - Engine Room AI analyzes data and creates step-by-step plans
 - `AnalyzeDataQuality()` (lines 362-379) - Data validation and cleanup recommendations
 
 **Conversion Logic:**
 - `convertTwilioToRingCentral()` (lines 1151-1185) - Core format transformation
 - `twilioToRingCentral()` and `ringCentralToTwilio()` - Bidirectional conversion functions
-- Standard migration mode vs Claude-enhanced mode with AI planning
+- Standard migration mode vs Engine Room AI-enhanced mode with AI planning
 
 **UI States:**
 - Progressive workflow: source → format → target → format → AI preference → plan review → execution
@@ -66,7 +66,7 @@ This is a Go-based phone system migration tool with Claude AI integration. The a
 
 ### Key Features
 
-**Claude AI Integration:**
+**Engine Room AI Integration:**
 - Intelligent migration order based on user roles and system impact
 - Risk assessment and mitigation strategies  
 - Step-by-step execution plans with detailed to-do lists
@@ -91,7 +91,7 @@ This is a Go-based phone system migration tool with Claude AI integration. The a
 - Standard library for HTTP client and JSON processing
 - Go 1.24.4 as specified in go.mod
 
-**Claude API Integration:**
+**Engine Room AI API Integration:**
 - Requires valid ANTHROPIC_API_KEY environment variable
 - Uses Claude 3 Sonnet model for analysis and planning
 - 30-second timeout for API calls
