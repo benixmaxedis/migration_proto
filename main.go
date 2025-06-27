@@ -778,91 +778,6 @@ func (m model) View() string {
 	}
 
 	return s.String()
-s.WriteString("\n\n")
-
-switch m.state {
-	case enteringSource:
-		s.WriteString(subtitleStyle.Render("Step 1: Enter source JSON filename"))
-		s.WriteString("\n\n")
-		s.WriteString("Source filename:\n")
-		s.WriteString(m.textInput.View())
-		s.WriteString("\n\n")
-		s.WriteString(helpStyle.Render("Type filename and press Enter, quit with q"))
-
-	case selectingSourceFormat:
-		s.WriteString(subtitleStyle.Render("Step 2: Select source format"))
-		s.WriteString("\n\n")
-		s.WriteString(fmt.Sprintf("Source file: %s\n\n", m.config.SourceFile))
-		for i, format := range m.sourceFormats {
-			cursor := " "
-			if i == m.selectedSource {
-				cursor = ">"
-			}
-			s.WriteString(fmt.Sprintf("%s %s\n", cursor, format))
-		}
-		s.WriteString("\n")
-		s.WriteString(helpStyle.Render("Navigate with ↑/↓, select with Enter"))
-
-	case enteringTarget:
-		s.WriteString(subtitleStyle.Render("Step 3: Enter target filename"))
-		s.WriteString("\n\n")
-		s.WriteString(fmt.Sprintf("Source: %s (%s)\n\n", m.config.SourceFile, m.config.SourceFormat))
-		s.WriteString("Target filename:\n")
-		s.WriteString(m.textInput.View())
-		s.WriteString("\n\n")
-		s.WriteString(helpStyle.Render("Type filename and press Enter"))
-
-	case selectingTargetFormat:
-		s.WriteString(subtitleStyle.Render("Step 4: Select target format"))
-		s.WriteString("\n\n")
-		s.WriteString(fmt.Sprintf("Source: %s (%s)\n", m.config.SourceFile, m.config.SourceFormat))
-		s.WriteString(fmt.Sprintf("Target: %s\n\n", m.config.TargetFile))
-		for i, format := range m.targetFormats {
-			cursor := " "
-			if i == m.selectedTarget {
-				cursor = ">"
-			}
-			s.WriteString(fmt.Sprintf("%s %s\n", cursor, format))
-		}
-		s.WriteString("\n")
-		s.WriteString(helpStyle.Render("Navigate with ↑/↓, select with Enter"))
-
-	case askingAIPreference:
-		s.WriteString(aiStyle.Render("Step 5: Use Engine Room AI for smart migration?"))
-		s.WriteString("\n\n")
-		s.WriteString("Engine Room AI can analyze your data and recommend optimal migration order.\n\n")
-		for i, option := range m.aiOptions {
-			cursor := " "
-			if i == m.selectedAI {
-				cursor = ">"
-			}
-			s.WriteString(fmt.Sprintf("%s %s\n", cursor, option))
-		}
-		s.WriteString("\n")
-		s.WriteString(helpStyle.Render("Navigate with ↑/↓, select with Enter"))
-
-
-	case completed:
-		if m.err != nil {
-			s.WriteString(errorStyle.Render("❌ Migration failed"))
-			s.WriteString("\n\n")
-			s.WriteString(fmt.Sprintf("Error: %v\n", m.err))
-		} else {
-			s.WriteString(successStyle.Render("✅ Migration completed successfully!"))
-			s.WriteString("\n\n")
-			if m.config.UseAI {
-				s.WriteString(aiStyle.Render("🧠 Enhanced with Engine Room AI analysis"))
-				s.WriteString("\n")
-			}
-			s.WriteString(fmt.Sprintf("Data migrated from %s (%s) to %s (%s)\n",
-				m.config.SourceFile, m.config.SourceFormat,
-				m.config.TargetFile, m.config.TargetFormat))
-		}
-		s.WriteString("\n")
-		s.WriteString(helpStyle.Render("Press any key to exit"))
-	}
-
-	return s.String()
 }
 
 // Migration messages
@@ -1029,7 +944,7 @@ func performMigration(config MigrationConfig) tea.Cmd {
 	return func() tea.Msg {
 		var err error
 		if config.UseAI {
-			err = migrateWithClaude(config)
+			err = migrateWithEngineRoom(config)
 		} else {
 			err = migrate(config)
 		}
@@ -1038,7 +953,7 @@ func performMigration(config MigrationConfig) tea.Cmd {
 }
 
 func migrateWithEngineRoom(config MigrationConfig) error {
-	// Get Claude API key from environment
+	// Get Engine Room API key from environment
 	apiKey := os.Getenv("ANTHROPIC_API_KEY")
 	if apiKey == "" {
 		return fmt.Errorf("ANTHROPIC_API_KEY environment variable not set")

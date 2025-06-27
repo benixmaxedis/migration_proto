@@ -55,7 +55,7 @@
     ]
   },
   "migration_metadata": {
-    "enhanced_by": "Claude AI",
+    "enhanced_by": "Engine Room AI",
     "execution_mode": "step-by-step",
     "migration_time": "2025-06-25 12:41:33",
     "source_format": "Twilio",
