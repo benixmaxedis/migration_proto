@@ -1,0 +1,165 @@
+{
+  "converted_data": {
+    "accounts": [
+      {
+        "id": "AC123456789abcdef",
+        "name": "John Doe",
+        "contact": "john.doe@company.com",
+        "main_number": "+15551234567",
+        "active": true
+      },
+      {
+        "id": "AC987654321fedcba",
+        "name": "Jane Smith",
+        "contact": "jane.smith@company.com",
+        "main_number": "+15559876543",
+        "active": true
+      },
+      {
+        "id": "AC456789123abcdef",
+        "name": "Bob Wilson",
+        "contact": "bob.wilson@company.com",
+        "main_number": "+15555555555",
+        "active": false
+      }
+    ],
+    "numbers": [
+      {
+        "id": "PN111111111111111",
+        "phone_number": "+15551234567",
+        "features": [
+          "sms",
+          "voice"
+        ],
+        "region": "US-CA-SF"
+      },
+      {
+        "id": "PN222222222222222",
+        "phone_number": "+15559876543",
+        "features": [
+          "voice",
+          "sms",
+          "mms",
+          "fax"
+        ],
+        "region": "US-NY-NYC"
+      },
+      {
+        "id": "PN333333333333333",
+        "phone_number": "+15555555555",
+        "features": [
+          "voice"
+        ],
+        "region": "US-TX-DAL"
+      }
+    ]
+  },
+  "migration_metadata": {
+    "enhanced_by": "Claude AI",
+    "execution_mode": "step-by-step",
+    "migration_time": "2025-06-25 12:41:33",
+    "source_format": "Twilio",
+    "target_format": "RingCentral"
+  },
+  "migration_plan": {
+    "recommended_order": [
+      {
+        "account": {
+          "account_sid": "AC123456789abcdef",
+          "friendly_name": "John Doe",
+          "email": "john.doe@company.com",
+          "phone_number": "+15551234567",
+          "status": "active"
+        },
+        "priority": 1,
+        "reason": "Active user account should be migrated first to minimize potential disruptions",
+        "risk_level": "low"
+      },
+      {
+        "account": {
+          "account_sid": "AC987654321fedcba",
+          "friendly_name": "Jane Smith",
+          "email": "jane.smith@company.com",
+          "phone_number": "+15559876543",
+          "status": "active"
+        },
+        "priority": 2,
+        "reason": "Active user account should be migrated after admin account",
+        "risk_level": "low"
+      },
+      {
+        "account": {
+          "account_sid": "AC456789123abcdef",
+          "friendly_name": "Bob Wilson",
+          "email": "bob.wilson@company.com",
+          "phone_number": "+15555555555",
+          "status": "inactive"
+        },
+        "priority": 3,
+        "reason": "Inactive account can be migrated last with minimal impact",
+        "risk_level": "low"
+      }
+    ],
+    "reasoning": "The recommended order prioritizes active user accounts to minimize potential disruptions during the migration process. Admin accounts should be migrated first to maintain system management capabilities throughout. Inactive accounts can be migrated last with lower risk.",
+    "risk_assessment": "Overall risk is low as long as proper data validation, backup, and testing procedures are followed. Main risks include data loss/corruption, service interruptions during migration, and missed configurations. Mitigation strategies include thorough data backup, multi-step validation, scheduling during low-usage periods, and fallback plans.",
+    "todo_list": [
+      {
+        "step": 1,
+        "description": "Data Backup",
+        "action": "Create a complete backup of existing Twilio configuration, user data, call logs, and any other critical information.",
+        "risk": "low",
+        "completed": false
+      },
+      {
+        "step": 2,
+        "description": "Data Validation",
+        "action": "Verify data integrity by checking for missing fields, invalid phone numbers, duplicate accounts, and any other potential issues.",
+        "risk": "medium",
+        "completed": false
+      },
+      {
+        "step": 3,
+        "description": "Migration Environment Setup",
+        "action": "Set up the new Twilio environment or account for migration, including any required configurations or integrations.",
+        "risk": "low",
+        "completed": false
+      },
+      {
+        "step": 4,
+        "description": "User Account Migration",
+        "action": "Migrate user accounts one by one according to the recommended priority order, with thorough testing and validation after each migration.",
+        "risk": "high",
+        "completed": false
+      },
+      {
+        "step": 5,
+        "description": "Configuration Migration",
+        "action": "Migrate any additional configurations, such as call routing, IVR flows, messaging settings, and integrations.",
+        "risk": "medium",
+        "completed": false
+      },
+      {
+        "step": 6,
+        "description": "Testing and Validation",
+        "action": "Perform comprehensive testing of the migrated system, including functionality, integrations, and failover scenarios. Validate data integrity and configurations.",
+        "risk": "medium",
+        "completed": false
+      },
+      {
+        "step": 7,
+        "description": "Cutover and Decommissioning",
+        "action": "Once testing is successful, cut over to the new system, decommission the old environment, and notify users of the completed migration.",
+        "risk": "high",
+        "completed": false
+      },
+      {
+        "step": 8,
+        "description": "Post-Migration Monitoring",
+        "action": "Closely monitor the new system for any issues or unexpected behavior, and be prepared to quickly address any problems that arise.",
+        "risk": "low",
+        "completed": false
+      }
+    ],
+    "estimated_time": "2-3 days, including preparation, migration, testing, and post-migration monitoring"
+  }
+}

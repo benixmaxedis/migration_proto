@@ -1,0 +1,45 @@
+{
+  "accounts": [
+    {
+      "id": "RC123456789",
+      "name": "Alice Johnson",
+      "contact": "alice.johnson@company.com",
+      "main_number": "+15551111111",
+      "active": true
+    },
+    {
+      "id": "RC987654321",
+      "name": "Charlie Brown",
+      "contact": "charlie.brown@company.com",
+      "main_number": "+15552222222",
+      "active": true
+    },
+    {
+      "id": "RC456789123",
+      "name": "Diana Prince",
+      "contact": "diana.prince@company.com",
+      "main_number": "+15553333333",
+      "active": false
+    }
+  ],
+  "numbers": [
+    {
+      "id": "RN444444444444444",
+      "phone_number": "+15551111111",
+      "features": ["voice", "sms", "fax", "conferencing"],
+      "region": "US-CA"
+    },
+    {
+      "id": "RN555555555555555",
+      "phone_number": "+15552222222",
+      "features": ["voice", "sms", "mms", "voicemail"],
+      "region": "US-FL"
+    },
+    {
+      "id": "RN666666666666666",
+      "phone_number": "+15553333333",
+      "features": ["voice"],
+      "region": "US-WA"
+    }
+  ]
+}

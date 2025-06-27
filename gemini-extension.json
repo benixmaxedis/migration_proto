@@ -1,0 +1,10 @@
+{
+  "name": "my-extension",
+  "version": "1.0.0",
+  "mcpServers": {
+    "my-server": {
+      "command": "node my-server.js"
+    }
+  },
+  "contextFileName": "GEMINI.md"
+}

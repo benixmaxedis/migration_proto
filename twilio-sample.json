@@ -1,0 +1,60 @@
+{
+  "users": [
+    {
+      "account_sid": "AC123456789abcdef",
+      "friendly_name": "John Doe",
+      "email": "john.doe@company.com",
+      "phone_number": "+15551234567",
+      "status": "active"
+    },
+    {
+      "account_sid": "AC987654321fedcba",
+      "friendly_name": "Jane Smith",
+      "email": "jane.smith@company.com",
+      "phone_number": "+15559876543",
+      "status": "active"
+    },
+    {
+      "account_sid": "AC456789123abcdef",
+      "friendly_name": "Bob Wilson",
+      "email": "bob.wilson@company.com",
+      "phone_number": "+15555555555",
+      "status": "inactive"
+    }
+  ],
+  "phone_numbers": [
+    {
+      "sid": "PN111111111111111",
+      "phone_number": "+15551234567",
+      "capabilities": {
+        "voice": true,
+        "sms": true,
+        "mms": false,
+        "fax": false
+      },
+      "address_sid": "US-CA-SF"
+    },
+    {
+      "sid": "PN222222222222222",
+      "phone_number": "+15559876543",
+      "capabilities": {
+        "voice": true,
+        "sms": true,
+        "mms": true,
+        "fax": true
+      },
+      "address_sid": "US-NY-NYC"
+    },
+    {
+      "sid": "PN333333333333333",
+      "phone_number": "+15555555555",
+      "capabilities": {
+        "voice": true,
+        "sms": false,
+        "mms": false,
+        "fax": false
+      },
+      "address_sid": "US-TX-DAL"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "accounts": [
+    {
+      "id": "AC123456789abcdef",
+      "name": "John Doe",
+      "contact": "john.doe@company.com",
+      "main_number": "+15551234567",
+      "active": true
+    },
+    {
+      "id": "AC987654321fedcba",
+      "name": "Jane Smith",
+      "contact": "jane.smith@company.com",
+      "main_number": "+15559876543",
+      "active": true
+    },
+    {
+      "id": "AC456789123abcdef",
+      "name": "Bob Wilson",
+      "contact": "bob.wilson@company.com",
+      "main_number": "+15555555555",
+      "active": false
+    }
+  ],
+  "numbers": [
+    {
+      "id": "PN111111111111111",
+      "phone_number": "+15551234567",
+      "features": [
+        "voice",
+        "sms"
+      ],
+      "region": "US-CA-SF"
+    },
+    {
+      "id": "PN222222222222222",
+      "phone_number": "+15559876543",
+      "features": [
+        "sms",
+        "mms",
+        "fax",
+        "voice"
+      ],
+      "region": "US-NY-NYC"
+    },
+    {
+      "id": "PN333333333333333",
+      "phone_number": "+15555555555",
+      "features": [
+        "voice"
+      ],
+      "region": "US-TX-DAL"
+    }
+  ]
+}
